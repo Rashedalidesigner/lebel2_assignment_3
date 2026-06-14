@@ -2,6 +2,7 @@
 
 create database football_ticket_booking_system;
 
+-- create users table
 create table if not exists users(
   user_id int primary key,
   full_name varchar(50) not null,
@@ -10,6 +11,8 @@ create table if not exists users(
   phone_number varchar(15)
 );
 
+
+-- create matches table
 create table if not exists matches(
   match_id int primary key,
   fixture varchar(150) not null,
@@ -18,6 +21,8 @@ create table if not exists matches(
   match_status varchar(30) check(match_status in('Available', 'Selling Fast', 'Sold Out', 'Postponed')) not null
 );
 
+
+-- create bookings table
 create table if not exists bookings(
   booking_id int primary key,
   user_id int references users(user_id) not null,
@@ -28,6 +33,8 @@ create table if not exists bookings(
 );
 
 
+
+-- insert data
 INSERT INTO users (
   user_id,
   full_name,
@@ -55,6 +62,7 @@ INSERT INTO users (
 (19, 'Anika Sultana', 'anika@mail.com', 'Football Fan', NULL);
 
 
+-- insert data
 INSERT INTO matches (
     match_id,
     fixture,
@@ -79,6 +87,8 @@ INSERT INTO matches (
 (115, 'Flamengo vs Palmeiras', 'Brasileirao', 65.00, 'Available');
 
 
+
+-- insert data
 INSERT INTO bookings (
     booking_id,
     user_id,
@@ -108,4 +118,23 @@ INSERT INTO bookings (
 (524, 8, 111, 'D-04', 'Pending', 75.00),
 (525, 9, 112, 'E-21', 'Confirmed', 82.00);
 
+-- query 1
+select match_id,fixture,base_ticket_price from matches where tournament_category='Champions League' and match_status='Available';
 
+-- query 2
+select user_id ,full_name,email from users where full_name ilike 'Tanvir%' or full_name ilike '%Haque%';
+
+-- query 3
+select booking_id,user_id,match_id,coalesce(payment_status,'Action Required') as payment_status from bookings;
+
+-- query 4
+select booking_id,full_name,fixture,total_cost from bookings as b inner join users as u on b.user_id = u.user_id inner join matches as m on b.match_id=m.match_id;
+
+-- query 5
+select users.user_id,full_name,booking_id from users left join bookings on bookings.user_id=users.user_id;
+
+-- query 6
+select * from bookings where total_cost>(select avg(total_cost) from bookings );
+
+-- query 7
+select match_id, fixture,base_ticket_price from matches order by base_ticket_price desc offset 1 limit 2;
