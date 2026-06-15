@@ -1,131 +1,145 @@
-Football Ticket Booking System (PostgreSQL Project)
-📌 Project Overview
+# ⚽ Football Ticket Booking System (SQL Database Project);
 
-The Football Ticket Booking System is a relational database project designed using PostgreSQL. It manages users, football matches, and ticket bookings while demonstrating real-world database relationships and SQL query operations.
 
-This project focuses on:
+### Submission Links
 
-Database design (ERD concepts)
-Primary Key & Foreign Key relationships
-Data integrity using constraints
-Advanced SQL queries (JOIN, Subquery, Aggregation, COALESCE, etc.)
-🎯 Objectives
-Design a normalized relational database
-Implement 1-to-Many relationships between Users, Matches, and Bookings
-Apply SQL constraints for data validation
-Perform advanced SQL queries for real-world reporting
-Demonstrate understanding of JOIN operations and subqueries
-🗄️ Database Schema
-1. Users Table
+ERD public :https://drive.google.com/file/d/1P45Hc0jZLYdV8bEhvJlfOcHhBvOmziVV/view?usp=sharing
 
-Stores information about football fans and ticket managers.
 
-Field	Description
-user_id	Unique ID for each user
-full_name	Full name of user
-email	Email address (unique)
-role	User role (Ticket Manager / Football Fan)
-phone_number	Contact number
-2. Matches Table
+github public : https://github.com/Rashedalidesigner/lebel2_assignment_3/
+
+interview Video link :
+
+## 📌 Overview
+
+This project is a relational database system designed for managing a Football Ticket Booking System. It includes users, matches, and bookings with properly defined relationships using SQL.
+
+The system demonstrates database design, relational integrity, and advanced SQL operations.
+
+---
+
+## 🎯 Objectives
+
+- Design a complete relational database (ERD structure)
+- Understand One-to-Many and Many-to-One relationships
+- Apply Primary Key and Foreign Key constraints
+- Write advanced SQL queries
+- Handle NULL values and data validation
+- Use JOINs, subqueries, and aggregations
+
+---
+
+## 🗄️ Database Schema
+
+### 1️⃣ Users Table
+
+Stores information about system users.
+
+- user_id → Unique identifier (Primary Key)  
+- full_name → Full name of user  
+- email → Unique email address  
+- role → Ticket Manager or Football Fan  
+- phone_number → Contact number  
+
+---
+
+### 2️⃣ Matches Table
 
 Stores football match details.
 
-Field	Description
-match_id	Unique match ID
-fixture	Teams playing (e.g., Real Madrid vs Barcelona)
-tournament_category	League name
-base_ticket_price	Starting ticket price
-match_status	Availability status
-3. Bookings Table
+- match_id → Unique match ID (Primary Key)  
+- fixture → Teams playing  
+- tournament_category → League or tournament name  
+- base_ticket_price → Starting ticket price  
+- match_status → Availability status  
 
-Stores ticket booking records.
+---
 
-Field	Description
-booking_id	Unique booking ID
-user_id	References Users table
-match_id	References Matches table
-seat_number	Assigned seat
-payment_status	Payment state
-total_cost	Final ticket price
-🔗 Relationships
-Users → Bookings (One-to-Many)
-Matches → Bookings (One-to-Many)
-Each booking connects one user with one match
-🛠️ Technologies Used
-PostgreSQL
-SQL (DDL & DML)
-Relational Database Design
-📊 Key SQL Features Used
+### 3️⃣ Bookings Table
 
-✔ CREATE DATABASE
-✔ CREATE TABLE with constraints
-✔ PRIMARY KEY & FOREIGN KEY
-✔ CHECK constraints
-✔ INSERT INTO (bulk data)
-✔ INNER JOIN
-✔ LEFT JOIN
-✔ SUBQUERY
-✔ COALESCE
-✔ ILIKE (case-insensitive search)
-✔ ORDER BY + LIMIT + OFFSET
+Stores ticket booking transactions.
 
-📌 Example Queries
-1. Champions League Available Matches
+- booking_id → Unique booking ID (Primary Key)  
+- user_id → References Users table (Foreign Key)  
+- match_id → References Matches table (Foreign Key)  
+- seat_number → Seat allocation (e.g., A-12)  
+- payment_status → Payment state (Pending, Confirmed, Cancelled, Refunded)  
+- total_cost → Final ticket cost  
+
+---
+
+## 🔗 Relationships
+
+- One User → Many Bookings  
+- One Match → Many Bookings  
+- Each booking links one user with one match  
+
+---
+
+## 🧠 SQL Concepts Used
+
+- CREATE DATABASE & TABLE  
+- PRIMARY KEY & FOREIGN KEY  
+- CHECK constraints  
+- INSERT INTO operations  
+- INNER JOIN and LEFT JOIN  
+- Subqueries  
+- GROUP BY and HAVING  
+- COALESCE for NULL handling  
+- ORDER BY, LIMIT, OFFSET  
+
+---
+
+## 📊 Example Queries
+
+### 🔹 Filter Champions League Matches
+```sql
 SELECT match_id, fixture, base_ticket_price
 FROM matches
 WHERE tournament_category = 'Champions League'
 AND match_status = 'Available';
-2. Search Users by Name Pattern
+
+
+🔹 Search Users by Name Pattern
 SELECT user_id, full_name, email
 FROM users
 WHERE full_name ILIKE 'Tanvir%'
    OR full_name ILIKE '%Haque%';
-3. Handle NULL Payment Status
+
+
+🔹 Handle NULL Payment Status
 SELECT booking_id, user_id, match_id,
 COALESCE(payment_status, 'Action Required') AS payment_status
 FROM bookings;
-4. Join Bookings with Users and Matches
-SELECT
-    b.booking_id,
-    u.full_name,
-    m.fixture,
-    b.total_cost
+
+
+🔹 Join Users, Bookings, and Matches
+SELECT b.booking_id, u.full_name, m.fixture, b.total_cost
 FROM bookings b
 INNER JOIN users u ON b.user_id = u.user_id
 INNER JOIN matches m ON b.match_id = m.match_id;
-5. Users with Bookings (LEFT JOIN)
-SELECT u.user_id, u.full_name, b.booking_id
-FROM users u
-LEFT JOIN bookings b ON u.user_id = b.user_id;
-6. Above Average Bookings
+
+
+🔹 Above Average Bookings
 SELECT *
 FROM bookings
-WHERE total_cost > (
-    SELECT AVG(total_cost) FROM bookings
-);
-7. Top Expensive Matches (Skip Highest)
-SELECT *
+WHERE total_cost > (SELECT AVG(total_cost) FROM bookings);
+
+
+🔹 Top 2 Expensive Matches (Skip Highest)
+SELECT match_id, fixture, base_ticket_price
 FROM matches
 ORDER BY base_ticket_price DESC
-OFFSET 1
-LIMIT 2;
-🚀 Project Highlights
-Real-world football ticket booking simulation
-Strong relational database design
-Practical SQL query implementation
-Covers beginner to intermediate SQL concepts
-📁 Project Structure
-football-ticket-booking-system/
-│
-├── schema.sql
-├── seed_data.sql
-├── queries.sql
-└── README.md
-👨‍💻 Author
+OFFSET 1 LIMIT 2;
 
-Rashed Ali
-Database & Backend Development Practice Project
 
-📌 Conclusion
+🎤 Viva Topics Covered
+Foreign Key role and integrity
+Primary Key constraints
+WHERE vs HAVING difference
+LEFT JOIN behavior
+Subquery vs JOIN usage
 
-This project demonstrates how a real-world ticket booking system can be built using relational database principles and SQL. It includes proper relationships, constraints, and analytical queries for reporting.
+
+🚀 Conclusion
+This project demonstrates how a real-world football ticket booking system works using relational database design and SQL queries. It ensures data consistency, relationships, and efficient querying.
