@@ -8,7 +8,7 @@ ERD public :https://drive.google.com/file/d/1P45Hc0jZLYdV8bEhvJlfOcHhBvOmziVV/vi
 
 github public : https://github.com/Rashedalidesigner/lebel2_assignment_3/
 
-interview Video link :
+interview Video link : https://youtu.be/qUwbBP4iEDw
 
 ## 📌 Overview
 
